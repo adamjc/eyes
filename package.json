@@ -1,0 +1,19 @@
+{
+  "name": "eyes",
+  "version": "1.0.0",
+  "description": "Eyes Slack Bot",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/adamjc/eyes.git"
+  },
+  "author": "adamjc",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/adamjc/eyes/issues"
+  },
+  "homepage": "https://github.com/adamjc/eyes#readme"
+}

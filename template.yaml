@@ -1,0 +1,16 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Eyes Slack Bot
+Resources:
+  SlackBot:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/
+      Handler: index.handler
+      Runtime: nodejs10.x
+      Events:
+        Eyes:
+          Type: Api
+          Properties:
+            Path: /eyes
+            Method: get
