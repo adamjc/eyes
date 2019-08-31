@@ -14,3 +14,12 @@ Resources:
           Properties:
             Path: /eyes
             Method: post
+
+  Redis:
+    Type: AWS::ElastiCache::CacheCluster
+    Properties:
+      Engine: redis
+      CacheNodeType: cache.t2.micro
+      NumCacheNodes: 1
+    
+
