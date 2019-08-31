@@ -4,6 +4,7 @@
   "description": "Eyes Slack Bot",
   "main": "src/index.js",
   "scripts": {
+    "start": "sam local start-api",
     "test": "jest"
   },
   "repository": {
