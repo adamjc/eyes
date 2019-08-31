@@ -25,3 +25,21 @@ function startGame (minutes) {
 }
 ```
 
+# What does the payload from Slack look like?
+
+body: "token=TcRE9uwWXFPvTj1AfYqTDVm5&team_id=TKWG74GBC&team_domain=laputanmachineexe&channel_id=CL7UCMPLG&channel_name=general&user_id=ULA38FX5L&user_name=adamjc86&command=%2Feyes&text=&response_url=https%3A%2F%2Fhooks.slack.com%2Fcommands%2FTKWG74GBC%2F744913246432%2FBSihGdSvO257FKarQzj9CT9e&trigger_id=744917323621.676551152386.de20cee7b06b5fe19fb420881db758fb"
+
+turned into an object:
+
+{
+  "token": "some string",
+  "team_id": "some string",
+  "team_domain": "slack workspace name",
+  "channel_id": "channel id",
+  "channel_name": "general",
+  "command": "eyes",
+  "text": "",
+  "response_url": "the url to respond to",
+  "user_name": "person who sent the command"
+}
+
