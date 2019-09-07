@@ -1,57 +1,69 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: Eyes Slack Bot
+
+Parameters:
+  GameStorePort:
+    Type: Number
+    Default: 6379
+
 Resources:
   SlackBot:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: src/
+      CodeUri: s3://eyes-source-code/src.zip
       Handler: index.handler
       Runtime: nodejs10.x
+      VpcConfig:
+        SecurityGroupIds:
+          - !GetAtt GameStoreSg.GroupId
+        SubnetIds:
+          - !Ref Subnet
       Events:
         Eyes:
           Type: Api
           Properties:
             Path: /eyes
             Method: post
-            VpcConfig:
-              SecurityGroupIds:
-                - !Ref GameStoreSg
-              SubnetIds:
-                - !Ref Subnet
 
   GameStore:
     Type: AWS::ElastiCache::CacheCluster
     Properties:
       Engine: redis
+      Port: !Ref GameStorePort
       CacheNodeType: cache.t2.micro
       NumCacheNodes: 1
-      CacheSubnetGroupName: !Ref Subnet
-      VpcSecurityGroupIds: 
+      CacheSubnetGroupName: !Ref SubnetGroup
+      VpcSecurityGroupIds:
+        - !Ref GameStoreSg
   
-  GameStoreSG:
-    Type: AWS::EC2:SecurityGroup
+  GameStoreSg:
+    Type: AWS::EC2::SecurityGroup
     Properties:
       GroupDescription: Security Group for the redis instance
       SecurityGroupIngress:
         -
           CidrIp: !GetAtt Vpc.CidrBlock
-          FromPort: !GetAtt GameStore.RedisEndpoint.Port
-          ToPort: !GetAtt GameStore.RedisEndpoint.Port
+          FromPort: !Ref GameStorePort
+          ToPort: !Ref GameStorePort
           IpProtocol: tcp
-      VpcId: !Ref VPC
+      VpcId: !Ref Vpc
+
+  SubnetGroup:
+    Type: AWS::ElastiCache::SubnetGroup
+    Properties:
+      Description: Because aws is fukken stupid sometimes, we have to do this nonsense rather than blat it in the fucking cache definition >:(
+      SubnetIds:
+        - !Ref Subnet
 
   Subnet:
     Type: AWS::EC2::Subnet
-    CidrBlock: !GetAtt VPC.CidrBlock
-    VpcId: !Ref VPC
+    Properties:
+      CidrBlock: !GetAtt Vpc.CidrBlock
+      VpcId: !Ref Vpc
 
   Vpc:
     Type: AWS::EC2::VPC
     Properties:
       CidrBlock: 10.0.0.0/24
-  
-  
-  
-    
 
